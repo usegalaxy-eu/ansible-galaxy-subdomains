@@ -46,7 +46,7 @@ Variable | Default | Meaning
             }
   roles:
     - galaxyproject.galaxy
-    - usegalaxy-eu.galaxy-subdomains
+    - usegalaxy_eu.galaxy_subdomains
     - galaxyproject.nginx
 ```
 
