@@ -7,7 +7,7 @@
 - name: Template out main welcome page
   template:
     src: welcome.html
-    dest: "{{ galaxy_subsite_dir }}/welcome.html"
+    dest: "{{ galaxy_subsite_dir }}/{{ galaxy_subsite_base_domain }}.html"
     mode: 0644
 
 - name: "Template out welcome pages"
@@ -33,6 +33,7 @@
     mode: 0644
   register: base_css
 
+# Any images
 - name: Copy custom background images
   copy:
     src: "files/subsites/{{ item.name }}.png"
@@ -41,6 +42,7 @@
   with_items: "{{ galaxy_subsites }}"
   when: item.wallpaper | default(False)
 
+# Main css file that's used as a fallback.
 - name: Main CSS
   shell: "cat {{ galaxy_server_dir }}/static/style/base.css {{ galaxy_subsite_dir }}/{{ galaxy_subsite_base_domain }}-custom.css > {{ galaxy_subsite_dir }}/{{ galaxy_subsite_base_domain }}.css"
   when: __galaxy_git_update_result is changed or (galaxy_subsite_base_css is defined and base_css is changed)
