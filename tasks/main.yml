@@ -15,7 +15,7 @@
     src: welcome.html
     dest: "{{ galaxy_subsite_dir }}/{{ item.name }}.{{ galaxy_subsite_base_domain }}.html"
     mode: 0644
-  with_items: "{{ galaxy_custom_sites }}"
+  with_items: "{{ galaxy_subsites }}"
 
 # Create the 'additional' CSS that's added to the base Galaxy CSS.
 - name: Template out CSS files
@@ -23,13 +23,13 @@
     src: multisite-base.css
     dest: "{{ galaxy_subsite_dir }}/{{ item.name }}.{{ galaxy_subsite_base_domain }}-custom.css"
     mode: 0644
-  with_items: "{{ galaxy_custom_sites }}"
+  with_items: "{{ galaxy_subsites }}"
   register: custom_css
 
 - name: Template out CSS files
   copy:
     dest: "{{ galaxy_subsite_dir }}/{{ galaxy_subsite_base_domain }}-custom.css"
-    content: "{{ galaxy_custom_site_base_css }}"
+    content: "{{ galaxy_subsite_base_css }}"
     mode: 0644
   register: base_css
 
@@ -38,12 +38,12 @@
     src: "files/subsites/{{ item.name }}.png"
     dest: "{{ galaxy_subsite_dir }}/{{ item.name }}.png"
     mode: 0644
-  with_items: "{{ galaxy_custom_sites }}"
+  with_items: "{{ galaxy_subsites }}"
   when: item.wallpaper | default(False)
 
 - name: Main CSS
   shell: "cat {{ galaxy_server_dir }}/static/style/base.css {{ galaxy_subsite_dir }}/{{ galaxy_subsite_base_domain }}-custom.css > {{ galaxy_subsite_dir }}/{{ galaxy_subsite_base_domain }}.css"
-  when: __galaxy_git_update_result is changed or (galaxy_custom_site_base_css is defined and base_css is changed)
+  when: __galaxy_git_update_result is changed or (galaxy_subsite_base_css is defined and base_css is changed)
 
 
 # Not sure why this is needed, to be honest. Should review.
@@ -56,5 +56,5 @@
 # Make the final CSS files.
 - name: Merge CSS files
   shell: "cat {{ galaxy_server_dir }}/static/style/base.css {{ galaxy_subsite_dir }}/{{ galaxy_subsite_base_domain }}-custom.css > {{ galaxy_subsite_dir }}/{{ item.name }}.{{ galaxy_subsite_base_domain }}.css"
-  with_items: "{{ galaxy_custom_sites }}"
+  with_items: "{{ galaxy_subsites }}"
   when: __galaxy_git_update_result is changed or custom_css is changed
