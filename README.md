@@ -17,3 +17,6 @@ GPLv3
 
 ## Authors
 
+- Helena Rasche (@hexylena)
+- Björn Grüning (@bgruening)
+- Gianmauro Cuccuru (@gmauro)
