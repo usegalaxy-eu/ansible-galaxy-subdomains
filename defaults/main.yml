@@ -28,20 +28,20 @@ galaxy_subsites: []
 #        }
 
 galaxy_subsite_nginx_routes: |
-	location /static/welcome.html {
-		alias {{ galaxy_subsite_dir }}/$host.html;
-	}
+    location /static/welcome.html {
+        alias {{ galaxy_subsite_dir }}/$host.html;
+    }
 
-	location ~ /static/dist/base.css {
-		root {{ galaxy_subsite_dir }};
+    location ~ /static/dist/base.css {
+        root {{ galaxy_subsite_dir }};
         # Fall back to base version if a per-host version can't be found.
-		try_files /$host.css /{{ galaxy_subsite_base_domain }}.css =404;
-	}
+        try_files /$host.css /{{ galaxy_subsite_base_domain }}.css =404;
+    }
 
     {% for item in galaxy_subsites %}
     {% if item.wallpaper %}
-	location ~ /static/dist/{{ item.name }}.png {
-		alias {{ galaxy_subsite_dir }}{{ item.name }}.png;
-	}
+        location ~ /static/dist/{{ item.name }}.png {
+            alias {{ galaxy_subsite_dir }}{{ item.name }}.png;
+        }
     {% endif %}
     {% endfor %}
