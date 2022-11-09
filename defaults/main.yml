@@ -1,3 +1,4 @@
+galaxy_subsite_default_welcome: "https://galaxyproject.org"
 galaxy_subsite_base_domain: "usegalaxy.org"
 galaxy_subsite_dir: /srv/subsite
 galaxy_subsite_base_css: '#masthead { background-color: #003399;}'
