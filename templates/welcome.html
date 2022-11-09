@@ -22,7 +22,7 @@ iframe {
     <iframe id='center-iframe' src="" height="100%" onload="this.style.position='static'; this.style.visibility='visible';"></iframe>
 <script type="text/javascript">
 var pseudo_rand = parseInt(Date.now() / 1000 / 60 / 10);
-document.getElementById('center-iframe').src = '{{ item.iframe }}?nonce=' + pseudo_rand + '#';
+	document.getElementById('center-iframe').src = '{% if item.iframe is defined %}{{ item.iframe }}{% else %}https://galaxyproject.org{% endif %}?nonce=' + pseudo_rand + '#';
 </script>
 </body>
 </html>
