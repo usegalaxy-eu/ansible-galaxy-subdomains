@@ -10,7 +10,7 @@ Variable | Default | Meaning
 `galaxy_subsite_dir` | `/srv/subsite`
 `galaxy_subsite_base_css` | `#masthead { background-color: #003399;}` |
 `galaxy_subsites` | See below | Subdomain listing and configuration.
-`galaxy_subsite_nginx_routes | complex | Some default nginx routes you can plop in your nginx routes.
+`galaxy_subsite_nginx_routes` | complex | Some default nginx routes you can plop in your nginx routes.
 
 
 ## Example Playbook
