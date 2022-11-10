@@ -17,21 +17,18 @@
     mode: 0644
   with_items: "{{ galaxy_subsites }}"
 
-# Create the 'additional' CSS that's added to the base Galaxy CSS.
-- name: Template out CSS files
+- name: Template out custom CSS per subsite.
   template:
     src: multisite-base.css
     dest: "{{ galaxy_subsite_dir }}/{{ item.name }}.{{ galaxy_subsite_base_domain }}-custom.css"
     mode: 0644
   with_items: "{{ galaxy_subsites }}"
-  register: custom_css
 
-- name: Template out CSS files
+- name: Create base domain custom css
   copy:
     dest: "{{ galaxy_subsite_dir }}/{{ galaxy_subsite_base_domain }}-custom.css"
     content: "{{ galaxy_subsite_base_css }}"
     mode: 0644
-  register: base_css
 
 # Any images
 - name: Copy custom background images
@@ -43,20 +40,10 @@
   when: item.wallpaper | default(False)
 
 # Main css file that's used as a fallback.
-- name: Main CSS
+- name: Create main site CSS
   shell: "cat {{ galaxy_server_dir }}/static/style/base.css {{ galaxy_subsite_dir }}/{{ galaxy_subsite_base_domain }}-custom.css > {{ galaxy_subsite_dir }}/{{ galaxy_subsite_base_domain }}.css"
-  when: __galaxy_git_update_result is changed or (galaxy_subsite_base_css is defined and base_css is changed)
-
-
-# Not sure why this is needed, to be honest. Should review.
-- name: Main CSS replace background color
-  replace:
-    path: "{{ galaxy_subsite_dir }}/{{ galaxy_subsite_base_domain }}.css"
-    regexp: '#masthead{background-color:#2c3143}' # Base galaxy masthead colouring
-    replace: '#masthead{background-color:#003399}' # Our custom masthead colouring
 
 # Make the final CSS files.
-- name: Merge CSS files
+- name: Merge CSS files for subsites
   shell: "cat {{ galaxy_server_dir }}/static/style/base.css {{ galaxy_subsite_dir }}/{{ galaxy_subsite_base_domain }}-custom.css > {{ galaxy_subsite_dir }}/{{ item.name }}.{{ galaxy_subsite_base_domain }}.css"
   with_items: "{{ galaxy_subsites }}"
-  when: __galaxy_git_update_result is changed or custom_css is changed
