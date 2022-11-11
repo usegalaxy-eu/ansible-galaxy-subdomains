@@ -45,5 +45,5 @@
 
 # Make the final CSS files.
 - name: Merge CSS files for subsites
-  shell: "cat {{ galaxy_server_dir }}/static/style/base.css {{ galaxy_subsite_dir }}/{{ galaxy_subsite_base_domain }}-custom.css > {{ galaxy_subsite_dir }}/{{ item.name }}.{{ galaxy_subsite_base_domain }}.css"
+  shell: "cat {{ galaxy_server_dir }}/static/style/base.css {{ galaxy_subsite_dir }}/{{ item.name }}.{{ galaxy_subsite_base_domain }}-custom.css > {{ galaxy_subsite_dir }}/{{ item.name }}.{{ galaxy_subsite_base_domain }}.css"
   with_items: "{{ galaxy_subsites }}"
