@@ -20,7 +20,7 @@ iframe {
 </head>
 <body style="margin:0px">
     <iframe id='center-iframe' src="" height="100%" onload="this.style.position='static'; this.style.visibility='visible';"></iframe>
-	<!-- Galaxy Subsite for {{ item.name }} -->
+	{% if item is defined %}<!-- Galaxy Subsite for {{ item.name }} -->{% endif %}
 <script type="text/javascript">
 var pseudo_rand = parseInt(Date.now() / 1000 / 60 / 10);
 	document.getElementById('center-iframe').src = '{% if item.iframe is defined %}{{ item.iframe }}{% else %}{{ galaxy_subsite_default_welcome }}{% endif %}?nonce=' + pseudo_rand + '#';
