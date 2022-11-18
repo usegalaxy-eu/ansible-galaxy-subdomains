@@ -47,3 +47,9 @@
 - name: Merge CSS files for subsites
   shell: "cat {{ galaxy_server_dir }}/static/style/base.css {{ galaxy_subsite_dir }}/{{ item.name }}.{{ galaxy_subsite_base_domain }}-custom.css > {{ galaxy_subsite_dir }}/{{ item.name }}.{{ galaxy_subsite_base_domain }}.css"
   with_items: "{{ galaxy_subsites }}"
+
+# Template out global_host_filters for the subsite specific tool lists
+- name: Template out global_host_filters.py
+  template:
+    src: "global_host_filters.py.j2"
+    dest: "{{ galaxy_server_dir }}/lib/galaxy/tool_util/toolbox/filters/global_host_filters.py"

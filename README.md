@@ -1,6 +1,6 @@
 # ansible-galaxy-subdomains
 
-Sets up the fancy subsite CSS/welcome pages on a per-subdomain basis like EU does.
+Sets up the fancy subsite CSS/welcome pages and tool sections on a per-subdomain basis like EU does
 
 ## Role Variables
 
@@ -25,6 +25,14 @@ Variable | Default | Meaning
       - name: virus # Accessible at virus.usegalaxy.aq
         brand: Viruses
         iframe: "https://galaxyproject.aq/viruses.html"
+        tool_sections: # The tool section ids to display, generic tools will always be displayed and the list of these can be found in `defaults/main.yml`
+          - "hicexplorer"
+          - "graph_display_data"
+          - "peak_calling"
+          - "assembly"
+          - "annotation"
+          - "genome_diversity"
+          - "multiple_alignments"
         custom_css: |
             #masthead {
                 background: linear-gradient(to bottom,#e2453c 0,#e2453c 16%,#e07e39 16%,#e07e39 32%,#e5d667 32%,#e5d667 48%,#51b95b 48%,#51b95b 66%,#1e72b7 66%,#1e72b7 86%,#6f5ba7 86%) no-repeat;
