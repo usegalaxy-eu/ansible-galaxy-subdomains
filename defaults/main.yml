@@ -1,12 +1,14 @@
 galaxy_subsite_default_welcome: "https://galaxyproject.org"
 galaxy_subsite_base_domain: "usegalaxy.org"
 galaxy_subsite_dir: /srv/subsite
-galaxy_subsite_base_css: "#masthead { background-color: #2c3143;}" #Standard Galaxy colour. Override for others
+galaxy_subsite_base_css: "#masthead { background-color: #2c3143;}" # Standard Galaxy colour. Override for others
 galaxy_subsites: []
 #  - name: test # Accessible at test.usegalaxy.org
 #    brand: Testing
 #    iframe: "https://example.com"
-#    wallpaper: false # If wallpaper is true, then files/subsites/{name}.png will be copied to /static/dist/{name}.png, and can be used exactly like that in the CSS.
+#    # If wallpaper is true, then files/subsites/{name}.png will be copied to
+#    # /static/dist/{name}.png, and can be used exactly like that in the CSS.
+#    wallpaper: false 
 #    tool_sections:
 #       - "hicexplorer"
 #       - "graph_display_data"
@@ -91,7 +93,7 @@ tool_ngs_sections:
 # The ones below are used by usegalaxy.org and usegalaxy.org.au
 #########################################################################
 
-#These tool labels will be displayed for every subdomain
+# These tool labels will be displayed for every subdomain
 tool_base_labels:
     - "file_and_meta_tools"
     - "general_text_tools"

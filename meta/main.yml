@@ -6,8 +6,7 @@ galaxy_info:
   description: Configure subdomain CSS themes for Galaxy
   company: Galaxy Europe
   license: GPL-3.0
-  min_ansible_version: 2.7
-  github_branch: main
+  min_ansible_version: "2.7"
   platforms:
     - name: EL
       versions:
