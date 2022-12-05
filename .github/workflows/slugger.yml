@@ -4,11 +4,19 @@
 #
 # See: https://github.com/marketplace/actions/publish-ansible-role-to-galaxy
 # See: https://github.com/ansible/galaxy/issues/46
+#
+# Note on the file name:
+#   Reminding me (@hexylena) to make a release of a role was the last thing
+#   @Slugger70 asked me our group chat. I'd forgotten to do it and he was
+#   waiting on me for it, well, here's to you mate, none of us can forget to
+#   make a point release again.
 
-name: "Bump 'n Release"
+name: "Automatic Regular Releases"
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron:  '0 0 * * 1'
 
 jobs:
   release:
@@ -28,6 +36,13 @@ jobs:
       - name: Install Ansible.
         run: pip3 install ansible-base
 
+      - name: Check for changes
+        id: changed
+        run: |
+          MOST_RECENT_TAG=$(git describe --tags --abbrev=0)
+          CHANGES=$(git diff ${MOST_RECENT_TAG} | wc -l)
+          echo "::set-output name=lines::${CHANGES}"
+
       - name: Create a new git tag
         run: |
           MOST_RECENT_TAG=$(git describe --tags --abbrev=0)
@@ -41,7 +56,9 @@ jobs:
           git config user.email github-actions@github.com
           git tag "$NEW_TAG"
           git push --tags
+        if: steps.changed.lines > 0
 
       # We have to do this step as GHA prevents triggering it's own actions, to prevent runaway loops.
       - name: Trigger a new import on Galaxy.
         run: ansible-galaxy role import --api-key ${{ secrets.GALAXY_API_KEY }} $(echo ${{ github.repository }} | cut -d/ -f1) $(echo ${{ github.repository }} | cut -d/ -f2) --branch main
+        if: steps.changed.lines > 0
