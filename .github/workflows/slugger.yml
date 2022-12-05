@@ -41,7 +41,7 @@ jobs:
         run: |
           MOST_RECENT_TAG=$(git describe --tags --abbrev=0)
           CHANGES=$(git diff ${MOST_RECENT_TAG} | wc -l)
-          echo "::set-output name=lines::${CHANGES}"
+          echo "lines=${CHANGES}" >> $GITHUB_OUTPUT
 
       - name: Create a new git tag
         run: |
