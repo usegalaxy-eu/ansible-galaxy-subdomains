@@ -1,60 +1,21 @@
-- name: Create directory
-  ansible.builtin.file:
-    path: "{{ galaxy_subsite_dir }}"
-    state: directory
-    mode: 0755
+---
+- name: Include Copy static files
+  ansible.builtin.include_tasks: setup_static.yml
+  loop: '{{ subdomains_subdomain_names }}'
+  loop_control:
+    loop_var: subdomain
+  when: subdomains_serve_static
 
-- name: Template out main welcome page
-  ansible.builtin.template:
-    src: welcome.html
-    dest: "{{ galaxy_subsite_dir }}/{{ galaxy_subsite_base_domain }}.html"
-    mode: 0644
+- name: Change Galaxy's config for static files (include add_static_config.yml)
+  ansible.builtin.include_tasks: create_static_config.yml
+  loop_control:
+    loop_var: static_key
+  loop: "{{ subdomains_static_keys | dict2items }}"
+  when: subdomains_serve_static_config
 
-- name: "Template out welcome pages"
-  ansible.builtin.template:
-    src: welcome.html
-    dest: "{{ galaxy_subsite_dir }}/{{ item.name }}.{{ galaxy_subsite_base_domain }}.html"
-    mode: 0644
-  with_items: "{{ galaxy_subsites }}"
-
-- name: Template out custom CSS per subsite.
-  ansible.builtin.template:
-    src: multisite-base.css
-    dest: "{{ galaxy_subsite_dir }}/{{ item.name }}.{{ galaxy_subsite_base_domain }}-custom.css"
-    mode: 0644
-  with_items: "{{ galaxy_subsites }}"
-
-- name: Create base domain custom css
-  ansible.builtin.copy:
-    dest: "{{ galaxy_subsite_dir }}/{{ galaxy_subsite_base_domain }}-custom.css"
-    content: "{{ galaxy_subsite_base_css }}"
-    mode: 0644
-
-# Any images
-- name: Copy custom background images
-  ansible.builtin.copy:
-    src: "files/subsites/{{ item.name }}.png"
-    dest: "{{ galaxy_subsite_dir }}/{{ item.name }}.png"
-    mode: 0644
-  with_items: "{{ galaxy_subsites }}"
-  when: item.wallpaper | default(False)
-
-# Main css file that's used as a fallback.
-- name: Create main site CSS
-  ansible.builtin.shell: |
-    cat {{ galaxy_server_dir }}/static/style/base.css {{ galaxy_subsite_dir }}/{{ galaxy_subsite_base_domain }}-custom.css \
-      > {{ galaxy_subsite_dir }}/{{ galaxy_subsite_base_domain }}.css
-
-# Make the final CSS files.
-- name: Merge CSS files for subsites
-  ansible.builtin.shell: |
-    cat {{ galaxy_server_dir }}/static/style/base.css {{ galaxy_subsite_dir }}/{{ item.name }}.{{ galaxy_subsite_base_domain }}-custom.css \
-      > {{ galaxy_subsite_dir }}/{{ item.name }}.{{ galaxy_subsite_base_domain }}.css
-  with_items: "{{ galaxy_subsites }}"
-
-# Template out global_host_filters for the subsite specific tool lists
-- name: Template out global_host_filters.py
-  ansible.builtin.template:
-    src: "global_host_filters.py.j2"
-    dest: "{{ galaxy_server_dir }}/lib/galaxy/tool_util/toolbox/filters/global_host_filters.py"
-    mode: 0644
+- name: Change Galaxy's config for subdomain themes
+  ansible.builtin.include_tasks: create_themes_config.yml
+  loop: '{{ subdomains_files }}'
+  loop_control:
+    loop_var: file
+  when: subdomains_per_host

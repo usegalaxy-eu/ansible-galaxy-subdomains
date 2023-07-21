@@ -1,0 +1,41 @@
+---
+- name: Create static dirs
+  ansible.builtin.file:
+    state: directory
+    mode: '0755'
+    path: "{{ subdomains_static_path }}/static-{{ subdomain }}"
+
+- name: Move all contents from static to parent directory
+  ansible.builtin.command: cp -r {{ subdomains_static_dir }}/. {{ subdomains_static_path }}/static-{{
+    subdomain }}
+  changed_when: false
+
+- name: Remove static dirs
+  ansible.builtin.file:
+    state: absent
+    mode: '0755'
+    path: "{{ subdomains_static_path }}/static-{{ subdomain }}/static"
+
+- name: Create welcome.html directory
+  ansible.builtin.file:
+    state: directory
+    mode: '0755'
+    path: "{{ subdomains_static_path }}/static-{{ subdomain }}/welcome.html"
+
+- name: Check if iframe for subdomain exists
+  ansible.builtin.uri:
+    url: "{{ subdomain_welcome_uri_prefix }}{{ subdomain }}.html"
+    return_content: true
+  register: iframe
+
+- name: Template welcome.html for subdomains
+  ansible.builtin.template:
+    src: welcome.html.j2
+    dest: "{{ subdomains_static_path }}/static-{{ subdomain }}/welcome.html/index.html"
+    mode: '0644'
+
+- name: Copy static files
+  ansible.builtin.include_tasks: copy_static_files.yml
+  loop: '{{ subdomains_static_keys | dict2items }}'
+  loop_control:
+    loop_var: object

@@ -1,0 +1,25 @@
+---
+- name: Append themes_conf.yml to all files in galaxy/config/themes
+  ansible.builtin.blockinfile:
+    block: "{{ lookup('ansible.builtin.file', subdomains_themes_conf_path) }}"
+    path: "{{ file }}"
+
+- name: Add themes_config_file_by_host key to galaxy's config
+  ansible.builtin.lineinfile:
+    path: "{{ subdomains_galaxy_config_file }}"
+    line: '{{ subdomains_base_indentation }}themes_config_file_by_host:'
+
+- name: Add domain to themes_config_file_by_host in galaxy's config
+  ansible.builtin.lineinfile:
+    path: "{{ subdomains_galaxy_config_file }}"
+    insertafter: 'themes_config_file_by_host:'
+    line: "{{ subdomains_base_indentation }}{{ subdomains_indentation }}'\
+     {{ subdomains_instance_domain }}': themes.yml"
+
+- name: Add entries for subdomains to themes_config_file_by_host in galaxy's config
+  ansible.builtin.lineinfile:
+    path: "{{ subdomains_galaxy_config_file }}"
+    insertafter: 'themes_config_file_by_host:'
+    line: "{{ subdomains_base_indentation }}{{ subdomains_indentation }}\
+     '{{ file | basename | regex_replace('.yml', '') }}.{{ subdomains_instance_domain }}':\
+      {{ file | basename }}"
