@@ -15,7 +15,7 @@
 
 - name: Change Galaxy's config for subdomain themes
   ansible.builtin.include_tasks: create_themes_config.yml
-  loop: '{{ subdomains_files }}'
+  loop: '{{ subdomains_themes_files }}'
   loop_control:
     loop_var: file
-  when: subdomains_per_host
+  when: subdomains_themes_per_host

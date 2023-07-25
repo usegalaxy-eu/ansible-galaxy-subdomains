@@ -23,3 +23,9 @@
     line: "{{ subdomains_base_indentation }}{{ subdomains_indentation }}\
      '{{ file | basename | regex_replace('.yml', '') }}.{{ subdomains_instance_domain }}':\
       {{ file | basename }}"
+
+- name: Copy themes files
+  ansible.builtin.copy:
+    src: "{{ file }}"
+    dest: "{{ galaxy_config_dir }}"
+    mode: '0644'
