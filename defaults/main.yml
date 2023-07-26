@@ -8,7 +8,7 @@ subdomains_indentation: "  "
 subdomains_base_indentation: ""
 
 subdomains_tool_sections: {}
-# assembly:
+# - name: assembly
 #   tool_sections:
 #     - "hicexplorer"
 #     - "graph_display_data"
