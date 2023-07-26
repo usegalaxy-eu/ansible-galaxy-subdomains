@@ -24,8 +24,9 @@
 
 - name: Check if iframe for subdomain exists
   ansible.builtin.uri:
-    url: "{{ subdomain_welcome_uri_prefix }}{{ subdomain }}.html"
+    url: "{{ subdomain_welcome_url_prefix }}{{ subdomain }}.html"
     return_content: true
+  ignore_errors: true
   register: iframe
 
 - name: Template welcome.html for subdomains
