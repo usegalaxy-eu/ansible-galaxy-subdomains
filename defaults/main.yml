@@ -3,6 +3,7 @@
 subdomains_serve_static: true # Let Galaxy serve static files, create directories per host
 subdomains_serve_static_config: true # Change galaxy's config for static files per host
 subdomains_themes_per_host: true # Add subdomains_theme_config_files per host and change galaxy's config
+subdomains_host_filters: true
 # Set indentation for your galaxy.yml
 subdomains_indentation: "  "
 subdomains_base_indentation: ""
@@ -35,7 +36,6 @@ subdomains_subdomain_names: "{{ subdomains_subdomain_file_names | regex_replace(
 subdomains_galaxy_config_file: "{{ galaxy_config_dir }}/galaxy.yml"
 subdomains_static_dir: "{{ galaxy_root }}/server/static"
 subdomains_static_path: "{{ galaxy_root }}/server"
-subdomains_static_files_src_dir: files/config/welcome_sites
 subdomains_instance_domain: usegalaxy.eu
 subdomains_ansible_file_path: files/galaxy/static
 subdomains_global_host_filters_path: "{{ galaxy_root }}/server/lib/galaxy/tool_util/toolbox/filters/global_host_filters.py"
