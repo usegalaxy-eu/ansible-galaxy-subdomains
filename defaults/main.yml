@@ -9,13 +9,16 @@ subdomains_base_indentation: ""
 
 subdomains_tool_sections: {}
 # assembly:
-#   - "hicexplorer"
-#   - "graph_display_data"
-#   - "peak_calling"
-#   - "assembly"
-#   - "annotation"
-#   - "genome_diversity"
-#   - "multiple_alignments"
+#   tool_sections:
+#     - "hicexplorer"
+#     - "graph_display_data"
+#     - "peak_calling"
+#     - "assembly"
+#     - "annotation"
+#     - "genome_diversity"
+#     - "multiple_alignments"
+#   extra_tool_labels:
+#     - "proteomics"
 subdomains_static_keys:
   static_dir: ""
   static_images_dir: "images/"
@@ -38,3 +41,45 @@ subdomains_ansible_file_path: files/galaxy/static
 subdomains_global_host_filters_path: "{{ galaxy_root }}/server/lib/galaxy/tool_util/toolbox/filters/global_host_filters.py"
 subdomain_welcome_url_prefix: https://usegalaxy-eu.github.io/index-
 subdomain_default_welcome: https://usegalaxy-eu.github.io/index.html
+
+# These sections will be displayed in the tool panel for every subdomain
+tool_base_sections:
+    - "getext"
+    - "send"
+    - "collection_operations"
+    - "textutil"
+    - "convert"
+    - "filter"
+    - "group"
+    - "expression_tools"
+
+# There sections are a collection of general NGS tools and will be used in most but not all subdomains
+tool_ngs_sections:
+    - "deeptools"
+    - "bed"
+    - "sambam"
+    - "bxops"
+    - "fastafastq"
+    - "fastq_quality_control"
+    - "picard"
+    - "mapping"
+    - "sambam"
+
+#########################################################################
+# Tool Label variables
+# Overide these Tool Labels with your own tool label ids.
+# The ones below are used by usegalaxy.org and usegalaxy.org.au
+#########################################################################
+
+# These tool labels will be displayed for every subdomain
+tool_base_labels:
+    - "file_and_meta_tools"
+    - "general_text_tools"
+    - "genomic_file_manipulation"
+    - "gff"
+    - "common_genomics"
+
+# These tool labels will be displayed for most subdomains
+tool_ngs_labels:
+    - "specific_genomics"
+    - "genomics_toolkits"

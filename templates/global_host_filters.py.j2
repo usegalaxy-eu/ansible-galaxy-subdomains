@@ -12,7 +12,7 @@ def per_host_tool_labels( context, label ):
         tool_label_filters = examples:per_host_tool_labels
     """
     host = context.trans.request.host
-    subdomain = host.replace('.{{ galaxy_subsite_base_domain }}', '')
+    subdomain = host.replace('.{{ subdomains_instance_domain }}', '')
     # Core tools used by all virtual hosts.
     valid_labels = {{ tool_base_labels }}
     general_ngs_labels = {{ tool_ngs_labels }}
