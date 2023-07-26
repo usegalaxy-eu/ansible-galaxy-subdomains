@@ -19,3 +19,10 @@
   loop_control:
     loop_var: file
   when: subdomains_themes_per_host
+
+# Template out global_host_filters for the subsite specific tool lists
+- name: Template out global_host_filters.py
+  ansible.builtin.template:
+    src: "global_host_filters.py.j2"
+    dest: "{{ subdomains_global_host_filters_path }}"
+    mode: 0644

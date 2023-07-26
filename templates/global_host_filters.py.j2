@@ -16,9 +16,9 @@ def per_host_tool_labels( context, label ):
     # Core tools used by all virtual hosts.
     valid_labels = {{ tool_base_labels }}
     general_ngs_labels = {{ tool_ngs_labels }}
-{% if galaxy_subsites is defined %}
-{% for subsite in galaxy_subsites %}
-    if "{{ subsite.name }}.{{ galaxy_subsite_base_domain }}" in host:
+{% if subdomain_tool_sections is defined %}
+{% for subsite in subdomain_tool_sections | dict2items %}
+    if "{{ subsite.key }}.{{ subdomains_instance_domain }}" in host:
         valid_labels += general_ngs_labels
 {% if subsite.extra_tool_labels is defined %}
         valid_labels += {{ subsite.extra_tool_labels }}
@@ -33,9 +33,9 @@ BASE_SECTIONS = {{ tool_base_sections }}
 GENERAL_NGS_SECTIONS = {{ tool_ngs_sections }}
 
 DOMAIN_SECTIONS = {
-{% if galaxy_subsites is defined %}
-{% for subdomain in galaxy_subsites %}
-    '{{ subdomain.name }}': GENERAL_NGS_SECTIONS + {{ subdomain.tool_sections }},
+{% if subdomains_tool_sections is defined %}
+{% for subdomain in subdomains_tool_sections | dict2items %}
+    '{{ subdomain.key }}': GENERAL_NGS_SECTIONS + {{ subdomain.tool_sections }},
 {% endfor %}
 {% endif %}    
 }
@@ -52,7 +52,7 @@ def per_host_tool_sections( context, section ):
         tool_section_filters = examples:per_host_tool_sections
     """
     host = context.trans.request.host
-    subdomain = host.replace('.{{ galaxy_subsite_base_domain }}', '')
+    subdomain = host.replace('.{{ subdomains_instance_domain }}', '')
 
     # Core tools used by all virtual hosts.
     # HiCtools mode: published in NAR 2018

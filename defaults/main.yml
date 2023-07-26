@@ -7,6 +7,15 @@ subdomains_themes_per_host: true # Add subdomains_theme_config_files per host an
 subdomains_indentation: "  "
 subdomains_base_indentation: ""
 
+subdomains_tool_sections: {}
+# assembly:
+#   - "hicexplorer"
+#   - "graph_display_data"
+#   - "peak_calling"
+#   - "assembly"
+#   - "annotation"
+#   - "genome_diversity"
+#   - "multiple_alignments"
 subdomains_static_keys:
   static_dir: ""
   static_images_dir: "images/"
@@ -26,6 +35,6 @@ subdomains_static_path: "{{ galaxy_root }}/server"
 subdomains_static_files_src_dir: files/config/welcome_sites
 subdomains_instance_domain: usegalaxy.eu
 subdomains_ansible_file_path: files/galaxy/static
-
+subdomains_global_host_filters_path: "{{ galaxy_root }}/server/lib/galaxy/tool_util/toolbox/filters/global_host_filters.py"
 subdomain_welcome_url_prefix: https://usegalaxy-eu.github.io/index-
 subdomain_default_welcome: https://usegalaxy-eu.github.io/index.html
