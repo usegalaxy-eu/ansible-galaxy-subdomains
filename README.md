@@ -1,16 +1,49 @@
 # ansible-galaxy-subdomains
 
-Sets up the fancy subsite CSS/welcome pages and tool sections on a per-subdomain basis like EU does
+Sets up the subdomain static content and themes.  
+(not fully serious) [Presentation on the topic](https://docs.google.com/presentation/d/1N1u1b0AqJ-ZVz8qKO5YxkwUSjSR5HwnuSxTsj6wAevE/)
+
+:warning: Important: All subdomains need a themes.yml file in a location set in
+~~~yaml
+subdomains_themes_files: "{{ lookup('fileglob', 'files/galaxy/config/themes/*.yml', wantlist=True) }}"
+~~~
+the name **must** match the subdomain name.  
+E.g. for example.usegalaxy.eu you need  
+~~~
+files/galaxy/config/themes/example.yml
+~~~
+Otherwise the subdomains may not be considered by the role.  
+
+:warning:**NGINX**: Make sure that Galaxy serves all subdomains (e.g. by omit `sever_name` and set `proxy_set_header Host $http_host;` under `location /`)
+
+## The Role can do the following:
+### Create static directories per subdomain when `subdomains_serve_static: true`
+- Creates a full depth copy of Galaxy's static dir for each subdomain
+- Copy subdomain specific static files, like `favicon.ico` or images. You need to create a directory under `subdomains_ansible_file_path` for each subdomain (and named like the subdomain) with subdirectories for each value in `subdomains_static_keys`, if you have a file in it (can be omitted otherwise). The file structure could look like the following:
+~~~bash
+files
+└── galaxy
+    ├── static
+    │   └── climate
+    │       ├── dist
+    │       ├── images
+    │       └── welcome.html
+    ├── themes
+    │   └── climate.yml
+    ├── themes_conf.yml
+~~~
+### Add "static-per-host" configuration to `galaxy.yml` when `subdomains_serve_static_config: true`
+- Sets `static_enabled: true` and creates entries for each value in `subdomains_static_keys` for each subdomain
+### Manage themes configuration files when `subdomains_themes_per_host: true`
+- Appends `themes_conf.yml` to each file in `subdomains_themes_files` and copy them over to `galaxy_config_dir`
+- Adds entries for `themes_config_file_by_host` for each subdomain in `galaxy.yml`
+
+### Template "Global Host Filters" when `subdomains_host_filters: true`
+This Python script is still needed for managing tool sections for each subdomain.
 
 ## Role Variables
 
-Variable | Default | Meaning
--- | -- | --
-`galaxy_subsite_base_domain` | `usegalaxy.org`
-`galaxy_subsite_dir` | `/srv/subsite`
-`galaxy_subsite_base_css` | `#masthead { background-color: #003399;}` |
-`galaxy_subsites` | See below | Subdomain listing and configuration.
-`galaxy_subsite_nginx_routes` | complex | Some default nginx routes you can plop in your nginx routes.
+See defaults for all variables. Most important variables were explained in the previous section.
 
 
 ## Example Playbook
@@ -20,12 +53,13 @@ Variable | Default | Meaning
   hosts: galaxy
   become: true
   vars:
-    galaxy_subsite_base_domain: usegalaxy.aq
-    galaxy_subsites:
-      - name: virus # Accessible at virus.usegalaxy.aq
-        brand: Viruses
-        iframe: "https://galaxyproject.aq/viruses.html"
-        tool_sections: # The tool section ids to display, generic tools will always be displayed and the list of these can be found in `defaults/main.yml`
+    subdomains_themes_conf_path: files/galaxy/themes.yml
+    subdomains_themes_files: "{{ lookup('fileglob', 'files/galaxy/themes/*.yml', wantlist=True) }}"
+    subdomains_base_indentation: "    "
+    subdomains_instance_domain: example.org
+    subdomains_tool_sections:
+      - name: assembly
+        tool_sections:
           - "hicexplorer"
           - "graph_display_data"
           - "peak_calling"
@@ -33,25 +67,9 @@ Variable | Default | Meaning
           - "annotation"
           - "genome_diversity"
           - "multiple_alignments"
-        custom_css: |
-            #masthead {
-                background: linear-gradient(to bottom,#e2453c 0,#e2453c 16%,#e07e39 16%,#e07e39 32%,#e5d667 32%,#e5d667 48%,#51b95b 48%,#51b95b 66%,#1e72b7 66%,#1e72b7 86%,#6f5ba7 86%) no-repeat;
-            }
-            #masthead .navbar-brand {
-              background: #3337;
-              height: 100%;
-              padding: 0.5em;
-              left: 0px;
-            }
-            #masthead .navbar-nav > li .nav-link {
-                color: white;
-            }
-            #masthead .navbar-nav > li {
-                background: #3337;
-            }
-            #masthead .navbar-nav > li.active {
-                background: #333e;
-            }
+        extra_tool_labels:
+          - "proteomics"
+
   roles:
     - galaxyproject.galaxy
     - usegalaxy_eu.galaxy_subdomains
@@ -61,7 +79,6 @@ Variable | Default | Meaning
 ## Role Dependencies
 
 - galaxyproject.galaxy (depends on Galaxy variables like `galaxy_server_dir`)
-- galaxyproject.nginx (supplies routes for nginx)
 
 Many variables from that role are set. It is assumed you will use that in your playbook as well.
 
@@ -70,7 +87,7 @@ Many variables from that role are set. It is assumed you will use that in your p
 GPLv3
 
 ## Authors
-
+- [Mira Kuntz](@mira-miracoli)
 - [Helena Rasche](@hexylena)
 - [Björn Grüning](@bgruening)
 - [Gianmauro Cuccuru](@gmauro)
