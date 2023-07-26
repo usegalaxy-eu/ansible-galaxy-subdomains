@@ -3,28 +3,28 @@
   ansible.builtin.file:
     state: directory
     mode: '0755'
-    path: "{{ subdomains_static_path }}/static-{{ subdomain }}"
+    path: "{{ subdomains_static_path }}/static-{{ subdomain.name }}"
 
 - name: Move all contents from static to parent directory
   ansible.builtin.command: cp -r {{ subdomains_static_dir }}/. {{ subdomains_static_path }}/static-{{
-    subdomain }}
+    subdomain.name }}
   changed_when: false
 
 - name: Remove static dirs
   ansible.builtin.file:
     state: absent
     mode: '0755'
-    path: "{{ subdomains_static_path }}/static-{{ subdomain }}/static"
+    path: "{{ subdomains_static_path }}/static-{{ subdomain.name }}/static"
 
 - name: Create welcome.html directory
   ansible.builtin.file:
     state: directory
     mode: '0755'
-    path: "{{ subdomains_static_path }}/static-{{ subdomain }}/welcome.html"
+    path: "{{ subdomains_static_path }}/static-{{ subdomain.name }}/welcome.html"
 
 - name: Check if iframe for subdomain exists
   ansible.builtin.uri:
-    url: "{{ subdomain_welcome_url_prefix }}{{ subdomain }}.html"
+    url: "{{ subdomain_welcome_url_prefix }}{{ subdomain.name }}.html"
     return_content: true
   ignore_errors: true
   register: iframe
@@ -32,7 +32,7 @@
 - name: Template welcome.html for subdomains
   ansible.builtin.template:
     src: welcome.html.j2
-    dest: "{{ subdomains_static_path }}/static-{{ subdomain }}/welcome.html/index.html"
+    dest: "{{ subdomains_static_path }}/static-{{ subdomain.name }}/welcome.html/index.html"
     mode: '0644'
 
 - name: Copy static files

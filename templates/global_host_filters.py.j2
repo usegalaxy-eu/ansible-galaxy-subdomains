@@ -16,8 +16,8 @@ def per_host_tool_labels( context, label ):
     # Core tools used by all virtual hosts.
     valid_labels = {{ tool_base_labels }}
     general_ngs_labels = {{ tool_ngs_labels }}
-{% if subdomain_tool_sections is defined %}
-{% for subsite in subdomain_tool_sections %}
+{% if subdomains is defined %}
+{% for subsite in subdomains %}
     if "{{ subsite.name }}.{{ subdomains_instance_domain }}" in host:
         valid_labels += general_ngs_labels
 {% if subsite.extra_tool_labels is defined %}
@@ -33,9 +33,11 @@ BASE_SECTIONS = {{ tool_base_sections }}
 GENERAL_NGS_SECTIONS = {{ tool_ngs_sections }}
 
 DOMAIN_SECTIONS = {
-{% if subdomains_tool_sections is defined %}
-{% for subdomain in subdomains_tool_sections %}
+{% if subdomains is defined %}
+{% for subdomain in subdomains %}
+{% if subdomain.tool_sections is defined %}
     '{{ subdomain.name }}': GENERAL_NGS_SECTIONS + {{ subdomain.tool_sections }},
+{% endif %}    
 {% endfor %}
 {% endif %}    
 }

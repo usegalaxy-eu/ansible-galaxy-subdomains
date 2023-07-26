@@ -8,7 +8,7 @@ subdomains_host_filters: true
 subdomains_indentation: "  "
 subdomains_base_indentation: ""
 
-subdomains_tool_sections: {}
+subdomains: {}
 # - name: assembly
 #   tool_sections:
 #     - "hicexplorer"
@@ -28,7 +28,7 @@ subdomains_static_keys:
   static_favicon_dir: "favicon.ico"
   static_robots_txt: "robots.txt"
 subdomains_themes_conf_path: files/galaxy/config/themes_conf.yml
-subdomains_themes_files: "{{ lookup('fileglob', 'files/galaxy/config/themes/*.yml', wantlist=True) }}"
+subdomains_themes_directories: "{{ lookup('fileglob', 'files/galaxy/config/themes/*.yml', wantlist=True) }}"
 subdomains_subdomain_file_names: "{{ subdomains_themes_files
         | map('basename') | list 
       }}"

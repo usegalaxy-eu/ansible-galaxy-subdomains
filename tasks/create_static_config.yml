@@ -20,9 +20,9 @@
 - name: Set line in static_*_by_host variable for each subdomain
   ansible.builtin.lineinfile:
     path: '{{ subdomains_galaxy_config_file }}'
-    line: "{{ subdomains_base_indentation }}{{ subdomains_indentation }}'{{ item }}.\
-     {{ subdomains_instance_domain }}': '{{ subdomains_static_path }}/static-{{ item }}\
+    line: "{{ subdomains_base_indentation }}{{ subdomains_indentation }}'{{ item.name }}.\
+     {{ subdomains_instance_domain }}': '{{ subdomains_static_path }}/static-{{ item.name }}\
      /{{ static_key.value }}'"
     insertafter: '{{ static_key.key }}_by_host:'
     state: present
-  loop: '{{ subdomains_subdomain_names }}'
+  loop: '{{ subdomains }}'

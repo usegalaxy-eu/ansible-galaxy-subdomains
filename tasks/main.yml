@@ -1,7 +1,7 @@
 ---
 - name: Include Copy static files
   ansible.builtin.include_tasks: setup_static.yml
-  loop: '{{ subdomains_subdomain_names }}'
+  loop: '{{ subdomains }}'
   loop_control:
     loop_var: subdomain
   when: subdomains_serve_static
@@ -15,9 +15,9 @@
 
 - name: Change Galaxy's config for subdomain themes
   ansible.builtin.include_tasks: create_themes_config.yml
-  loop: '{{ subdomains_themes_files }}'
+  loop: '{{ subdomains }}'
   loop_control:
-    loop_var: file
+    loop_var: subdomain
   when: subdomains_themes_per_host
 
 # Template out global_host_filters for the subsite specific tool lists

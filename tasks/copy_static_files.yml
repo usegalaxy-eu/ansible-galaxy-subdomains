@@ -2,13 +2,13 @@
 - name: Copy static files
   ansible.builtin.copy:
     src: '{{ item }}'
-    dest: '{{ subdomains_static_path }}/static-{{ subdomain }}/{{ object.value }}'
+    dest: '{{ subdomains_static_path }}/static-{{ subdomain.name }}/{{ object.value }}'
     mode: '0644'
-  with_fileglob: '{{ subdomains_ansible_file_path }}/{{ subdomain }}/{{ object.value }}*'
+  with_fileglob: '{{ subdomains_ansible_file_path }}/{{ subdomain.name }}/static/{{ object.value }}*'
 
 - name: Copy files from dist
   ansible.builtin.copy:
     src: "{{ item }}"
-    dest: '{{ subdomains_static_path }}/static-{{ subdomain }}/dist'
+    dest: '{{ subdomains_static_path }}/static-{{ subdomain.name }}/dist'
     mode: '0644'
-  with_fileglob: '{{ subdomains_ansible_file_path }}/{{ subdomain }}/dist/*'
+  with_fileglob: '{{ subdomains_ansible_file_path }}/{{ subdomain.name }}/static/dist/*'
