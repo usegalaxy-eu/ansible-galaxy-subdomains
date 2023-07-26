@@ -21,8 +21,8 @@
     path: "{{ subdomains_galaxy_config_file }}"
     insertafter: 'themes_config_file_by_host:'
     line: "{{ subdomains_base_indentation }}{{ subdomains_indentation }}\
-     '{{ file | basename | regex_replace('.yml', '') }}.{{ subdomains_instance_domain }}':\
-       {{ file | basename }}"
+     '{{ file | basename | regex_replace('.yml', '') }}.{{ subdomains_instance_domain }}': \
+      {{ file | basename }}"
 
 - name: Copy themes files
   ansible.builtin.copy:
