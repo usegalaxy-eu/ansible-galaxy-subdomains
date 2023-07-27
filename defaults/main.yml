@@ -40,7 +40,7 @@ subdomains_instance_domain: usegalaxy.eu
 subdomains_ansible_file_path: files/galaxy/static
 subdomains_global_host_filters_path: "{{ galaxy_root }}/server/lib/galaxy/tool_util/toolbox/filters/global_host_filters.py"
 subdomain_welcome_url_prefix: https://usegalaxy-eu.github.io/index-
-subdomain_default_welcome: https://usegalaxy-eu.github.io/index.html
+subdomain_default_welcome: https://galaxyproject.org
 
 # These sections will be displayed in the tool panel for every subdomain
 tool_base_sections:
