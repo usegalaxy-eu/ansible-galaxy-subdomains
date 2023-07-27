@@ -87,8 +87,8 @@ Many variables from that role are set. It is assumed you will use that in your p
 GPLv3
 
 ## Authors
-- [Mira Kuntz](@mira-miracoli)
 - [Helena Rasche](@hexylena)
 - [Björn Grüning](@bgruening)
 - [Gianmauro Cuccuru](@gmauro)
 - [Simon Gladman](@slugger70)
+- [Mira Kuntz](@mira-miracoli)
